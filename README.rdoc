@@ -6,6 +6,13 @@ A short DSL to build and maintain NSIS scripts.
 
 The intention is to implement most of the NSIS API, as documented here: http://nsis.sourceforge.net/Docs/
 
+== Useful Links
+
+* Basic NSIS instructions - http://nsis.sourceforge.net/Docs/Chapter4.html#4.9.1
+* Create a simple gem using Jeweler - http://minhajuddin.com/2010/09/30/create-a-simple-gem-using-jeweler/
+* Creating DSLs with Ruby - http://www.artima.com/rubycs/articles/ruby_as_dsl.html
+* Using instance_eval in multiple contexts - http://www.infoq.com/articles/eval-options-in-ruby
+
 == Contributing to ruby-nsis
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
