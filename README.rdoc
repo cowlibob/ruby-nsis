@@ -6,6 +6,9 @@ A short DSL to build and maintain NSIS scripts.
 
 The intention is to implement most of the NSIS API, as documented here: http://nsis.sourceforge.net/Docs/
 
+An initial release will probably interact with makensis.exe over the commandline to produce the installer executable.
+However, it is my goal to provide a c extension which wraps this functionality in a library and removes the makensis dependency.
+
 == Useful Links
 
 * Basic NSIS instructions - http://nsis.sourceforge.net/Docs/Chapter4.html#4.9.1
