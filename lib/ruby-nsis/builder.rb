@@ -1,5 +1,5 @@
 Dir.glob(File.expand_path('../*_instructions.rb', __FILE__)).each {|rb| require rb}
-require 'prettyprint'
+
 module NSIS
   class Builder
     attr :configuration
