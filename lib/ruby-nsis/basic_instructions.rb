@@ -9,7 +9,8 @@ module NSIS
     #   only one source file can be specified
     
     def file filename, options = {}
-      if options[:as] and Dir.glob(filename).length > 1
+      source = File.join(Builder.config.base_path, filename)
+      if options[:as] and Dir.glob(source).length > 1
         raise NSIS::BadParameterError.new("NSIS::Script::file() may only accept a single source if :as is specified.")
       end
       

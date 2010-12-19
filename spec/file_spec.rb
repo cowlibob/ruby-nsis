@@ -4,7 +4,7 @@ include NSIS
 describe "File Tasks" do
   before(:each) do
     Builder::config do
-      base_path = 'examples/source'
+      base_path File.expand_path('../../test_data/file_spec', __FILE__)
     end
   end
   
@@ -40,6 +40,14 @@ describe "File Tasks" do
         file '*', :as => 'dir\*'
       end
     end.should raise_error(Builder::BadParameterError)
+  end
+  
+  it "should not thow an exception if less than two files are specified with rename" do
+    lambda do
+      Builder::script do
+        file '1.*', :as => 'dir\*'
+      end
+    end.should_not raise_error(Builder::BadParameterError)
   end
   
   it "should exclude specified files" do

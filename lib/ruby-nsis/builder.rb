@@ -14,7 +14,7 @@ module NSIS
   
     def self.config(&block)
       @@configuration ||= Configuration.new
-      @@configuration.instance_eval(&block)
+      @@configuration.instance_eval(&block) if block_given?
       @@configuration
     end
   end
