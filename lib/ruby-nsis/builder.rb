@@ -21,14 +21,23 @@ module NSIS
   
   class Script
     include NSIS::BasicInstructions
-  
+    attr_reader :sources, :commands
+    
     def initialize
       @commands = []
+      @sources = []
     end
   
     def output
       @commands.join("\n")
     end
+    
+    def append_instruction instruction, depth = 1
+      instruction = instruction.join(" ") if instruction.kind_of?(Array)
+      @commands << instruction
+      @sources << caller[depth].match(/(.*:.*)[:]/)[1]
+    end
+      
   end
 
   class Configuration

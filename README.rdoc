@@ -9,6 +9,12 @@ The intention is to implement most of the NSIS API, as documented here: http://n
 An initial release will probably interact with makensis.exe over the commandline to produce the installer executable.
 However, it is my goal to provide a c extension which wraps this functionality in a library and removes the makensis dependency.
 
+== Handling makeNSIS compilation errors
+
+Referring to the compilation of NSIS scripts, not the tool; I've had some thoughts.
+Each dsl command translates to one or more NSIS script lines. As a dsl command is added to the NSIS::Builder::commands array, a line & line number should be stored in a sibling array.
+The makeNSIS error stating line and file should be translated using these two arrays back to the line & source for the dsl.
+
 == Useful Links
 
 * Basic NSIS instructions - http://nsis.sourceforge.net/Docs/Chapter4.html#4.9.1

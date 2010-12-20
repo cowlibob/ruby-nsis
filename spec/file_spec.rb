@@ -78,5 +78,10 @@ describe "File Tasks" do
     end.output.should == 'File /r /x *.res /x *.obj /x *.pch source\*.*'
   end
   
+  it "should preserve the file attributes" do
+    Builder::script do
+      file '*.ext', :with_attributes => true
+    end.output.should == 'File /a *.ext'
+  end
   
 end

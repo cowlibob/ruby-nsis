@@ -9,8 +9,7 @@ module NSIS
     #   only one source file can be specified
     
     def file filename, options = {}
-      source = File.join(Builder.config.base_path, filename)
-      if options[:as] and Dir.glob(source).length > 1
+      if options[:as] and Dir.glob(File.join(Builder.config.base_path, filename)).length > 1
         raise NSIS::BadParameterError.new("NSIS::Script::file() may only accept a single source if :as is specified.")
       end
       
@@ -21,6 +20,9 @@ module NSIS
       
       # recursive
       command << "/r" if options[:recurse]
+      
+      # preserve attributes
+      command << "/a" if options[:with_attributes]
 
       # excluded files
       command << [options[:not]].flatten.collect{|n| "/x #{n}"}.join(' ') if options[:not]
@@ -28,7 +30,7 @@ module NSIS
       # rename or straight
       command << (options[:as] ? "/oname=\"#{options[:as]}\" #{filename}" : filename)
       
-      @commands << command.join(" ")
+      append_instruction command
     end
     
     
@@ -39,7 +41,8 @@ module NSIS
       
       command << source << dest
       
-      @commands << command.join(" ")
+      append_instruction command
+      
     end
   end
 end
