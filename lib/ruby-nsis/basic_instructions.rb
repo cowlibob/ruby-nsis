@@ -1,6 +1,12 @@
 module NSIS
   module BasicInstructions
     
+    # Echos input to output. Useful for NSIS instructions/features not implemented specifically in ruby-nsis.
+    
+    def echo *input
+      append_instruction input.join(' ')
+    end
+    
     # Adds file(s) to be extracted to the current output path
     # 
     # - Use <code>:as => 'new_name'</code> to specify an output name distinct from the input name.
@@ -33,7 +39,10 @@ module NSIS
       append_instruction command
     end
     
-    
+    # Renames files already on target system
+    #
+    # - Use <code>:allow_reboot => true</code> to enable rename after a reboot, useful for DLLs in use etc.
+    #
     def rename source, dest, options = {}
       command = ["Rename"]
       
