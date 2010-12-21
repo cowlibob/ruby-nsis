@@ -1,5 +1,4 @@
 require 'helper'
-require 'pp'
 include NSIS
 
 describe "NSIS::Builder::Script" do
@@ -9,11 +8,12 @@ describe "NSIS::Builder::Script" do
       rename 'old.ext', 'new.ext'
     end
     
-    s.sources.should be_a_kind_of(Array)
-    s.sources.should have_at_least(2).lines
+    s.input_lines.should be_a_kind_of(Array)
+    s.input_lines.should have_at_least(2).lines
+    s.input_lines.first.to_s.match(/#{__FILE__}:\d+/).should_not be_nil
     
-    s.commands.should be_a_kind_of(Array)
-    s.commands.should have_at_least(2).lines
+    s.output_lines.should be_a_kind_of(Array)
+    s.output_lines.should have_at_least(2).lines
     
   end
     
