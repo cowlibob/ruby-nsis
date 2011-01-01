@@ -1,13 +1,47 @@
+# encoding: utf-8
+
 module NSIS
   class Configuration
     attr_reader :options
-    Properties = [:base_path, :branding_image, :gui_init]
+    
+    Callbacks = [:gui_init]
+    
     def initialize
-      @options = {}
+      @options = {'base_path' => Dir.pwd, 'target' => 'installer'}
+      @branding_image = {}
     end
     
-    # Add accessor method for each property, which takes a parameter to set and none to get.
-    Properties.each do |attr|
+    Properties = [:base_path, :branding_image, :target]
+    
+    def set value
+      unless value.nil?
+        param = caller[0].split[-1].chop[1..-1]
+        @options[param] = value
+      else
+        nil
+      end
+    end
+    private :set
+    
+    def target value = nil
+      set(value) || "#{File.join(@options['base_path'], @options['target'])}.exe"
+    end
+    
+    def outfile
+      "OutFile #{target}"
+    end
+    
+    def base_path value = nil
+      set(value) || @options['base_path']
+    end
+    
+    def branding_image value = nil
+      set(value) || @options['branding_image'] && "AddBrandingImage #{@options['branding_image'][:position]} #{@options['branding_image'][:width]} #{@options['branding_image'][:padding]}"
+    end
+    
+
+    # Add accessor method for each callback, which takes a parameter to set and none to get.
+    Callbacks.each do |attr|
       code = """
       def #{attr}(value = nil)
         value.nil? ? @options[:#{attr}] : @options[:#{attr}] = value
@@ -18,11 +52,7 @@ module NSIS
     # Generates a string containing NSIS installer attributes.
     # These are generally positioned at the beginning of an NSIS script.
     def output_attributes
-      o = Properties.collect do |property|
-        method = "output_#{property}".to_sym
-        send(method) if private_methods.include?(method)
-      end 
-      o.join("\n")
+      [outfile, branding_image].join("\n")
     end
     
     # Generates a string containing the definition for the NSIS .onGUIInit function.
@@ -62,25 +92,32 @@ module NSIS
       o = []
       o << case name
         when :gui_init
-          filename = File.basename(branding_image[:source])
-          <<-EOS
-            Function .onGUIInit
+          filename = File.basename(@options['branding_image'][:source])
+          if win32
+            branding_image_instructions = <<-EOS
               SetOutPath "$TEMP"
               SetFileAttributes #{filename} temporary
-              File "#{branding_image[:source]}"
+              File "#{@options['branding_image'][:source]}"
               SetBrandingImage "$TEMP\\#{filename}"
-              #{@options[name]}
+            EOS
+          end
+          
+          <<-EOS
+            Function .onGUIInit
+              #{branding_image_instructions}
+              #--------------------- begin custom code
+              #{gui_init}
+              #--------------------- end custom code
             FunctionEnd
           EOS
           
       end
       o.join("\n")
     end
-        
     
-    def output_branding_image
-      "AddBrandingImage #{branding_image[:position]} #{branding_image[:width]} #{branding_image[:padding]}"
+    def self.win32
+      RUBY_PLATFORM =~ /mswin|mingw/
     end
-    private :output_branding_image
+        
   end
 end

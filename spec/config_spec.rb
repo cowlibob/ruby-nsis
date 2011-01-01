@@ -15,4 +15,10 @@ describe "NSIS::Config" do
       base_path "~/harmony/"
     end.base_path.should == "~/harmony/"
   end
+  
+  it "should accept and return a target to which the installer executable will be written" do
+    Builder.config do
+      target "ruby-nsis-test"
+    end.target.should include("ruby-nsis-test.exe")
+  end
 end

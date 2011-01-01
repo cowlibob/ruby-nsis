@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require_relative 'patches/kernel'
 require_relative 'script'
 require_relative 'configuration'
