@@ -8,8 +8,8 @@ module NSIS
     
     @@scripts = []
 
-    def self.script &block
-      @@scripts << Script.new
+    def self.script(config = nil, &block)
+      @@scripts << Script.new(config)
       @@scripts.last.instance_eval(&block)
       @@scripts.last
     end
